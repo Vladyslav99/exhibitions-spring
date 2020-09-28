@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <title>Sign up</title>
+</head>
+<header th:insert="header::header"></header>
+<body>
+<div class="container-fluid">
+    <div class="container login-registration-container w-50 p-5">
+        <form action="/registration" method="post" th:object="${userDTO}">
+            <h1 class="text-center">Create your account</h1>
+            <div class="form-group">
+                <label for="inputLogin">Enter login</label>
+                <input type="text" class="form-control" id="inputLogin" name="username" placeholder="Login...">
+            </div>
+            <div class="alert alert-danger p-1" role="alert"
+                 th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail">Enter email</label>
+                <input type="text" class="form-control" id="inputEmail" placeholder="Email address...">
+            </div>
+            <div class="alert alert-danger p-1" role="alert"
+                 th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputPassword">Enter password</label>
+                <input type="password" class="form-control" id="inputPassword" placeholder="Password...">
+            </div>
+            <div class="alert alert-danger p-1" role="alert">
+                This is a danger alert—check it out!
+            </div>
+
+            <div class="form-group">
+                <label for="inputMatchingPassword">Confirm password</label>
+                <input type="password" class="form-control" id="inputMatchingPassword" placeholder="Password...">
+            </div>
+            <div class="alert alert-danger p-1" role="alert">
+                This is a danger alert—check it out!
+            </div>
+            <button type="submit" class="btn btn-primary">Sign up</button>
+        </form>
+    </div>
+</div>
+</body>
+<footer th:insert="footer::footer"></footer>
+</html>
