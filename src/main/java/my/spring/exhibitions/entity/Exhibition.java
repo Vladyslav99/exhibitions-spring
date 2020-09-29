@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Exhibition {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue
     private Long id;
 
     @Column(nullable = false)

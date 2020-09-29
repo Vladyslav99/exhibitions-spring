@@ -21,33 +21,51 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Theme EN</th>
-                <th scope="col">Theme UA</th>
-                <th scope="col">Description EN</th>
-                <th scope="col">Description UA</th>
-                <th scope="col">Image</th>
+                <th scope="col" th:text="#{admin_panel.exhibition.table.id}">Id</th>
+                <th scope="col" th:text="#{admin_panel.exhibition.table.theme_en}">Theme EN</th>
+                <th scope="col" th:text="#{admin_panel.exhibition.table.theme_ua}">Theme UA</th>
+                <th scope="col" th:text="#{admin_panel.exhibition.table.description_en}">Description EN</th>
+                <th scope="col" th:text="#{admin_panel.exhibition.table.description_ua}">Description UA</th>
+                <th scope="col" th:text="#{admin_panel.exhibition.table.image}">Image</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="exhibition : ${exhibitions}">
-                <th scope="row" th:text="${exhibition.id}">1</th>
-                <td th:text="${exhibition.themeEnglish}">Mark</td>
-                <td th:text="${exhibition.themeUkrainian}">Otto</td>
-                <td th:text="${exhibition.descriptionEnglish}">@mdo</td>
-                <td th:text="${exhibition.descriptionUkrainian}">@mdo</td>
+                <th scope="row" th:text="${exhibition.id}"></th>
+                <td th:text="${exhibition.themeEnglish}"></td>
+                <td th:text="${exhibition.themeUkrainian}"></td>
+                <td th:text="${exhibition.descriptionEnglish}"></td>
+                <td th:text="${exhibition.descriptionUkrainian}"></td>
                 <td><img th:src="${exhibition.imageUrl}" style="height: 60px; width: 60px;"></td>
-<!--                <td th:text="${exhibition.id}"></td>-->
             </tr>
             </tbody>
         </table>
-    </div>
 
-    <div class="container pagination">
-        <div th:if="${exhibitionPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
-            <a th:href="@{/admin/exhibition_panel(size=${exhibitionPage.size}, page=${pageNumber})}"
-               th:text="${pageNumber}" th:class="${pageNumber==exhibitionPage.number+1} ? active"></a>
-        </div>
+
+        <nav>
+            <ul class="pagination justify-content-center">
+<!--                <li class="page-item" th:classappend="${exhibitionPage.number == 0} ? 'disabled' : ''">-->
+<!--                    <a class="page-link" tabindex="-1"-->
+<!--                       th:href="@{/admin/exhibition_panel(page=${exhibitionPage.number})}"-->
+<!--                       th:text="#{pagination.link.previous}">Previous</a>-->
+<!--                </li>-->
+
+
+                <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == exhibitionPage.number + 1} ? 'active' : ''">
+                    <a class="page-link" th:href="@{/admin/exhibition_panel(page=${pageNumber})}"
+                       th:text="${pageNumber}">1</a>
+                </li>
+
+
+<!--                <li class="page-item"-->
+<!--                    th:classappend="${exhibitionPage.number == exhibitionPage.totalPages - 1} ? 'disabled' : ''">-->
+<!--                    <a class="page-link"-->
+<!--                       th:href="@{/admin/exhibition_panel(page=${exhibitionPage.number + 2})}"-->
+<!--                       th:text="#{pagination.link.next}">Next</a>-->
+<!--                </li>-->
+            </ul>
+        </nav>
     </div>
 
     <div class="container w-75">
@@ -76,7 +94,7 @@
                 <label for="inputDescriptionEnglish" th:text="#{admin_panel.exhibition.label.description_en}">Description
                     EN</label>
                 <textarea name="descriptionEnglish" th:value="*{descriptionEnglish}" class="form-control"
-                          id="inputDescriptionEnglish" rows="3"  th:text="*{themeEnglish}"></textarea>
+                          id="inputDescriptionEnglish" rows="3" th:text="*{themeEnglish}"></textarea>
             </div>
             <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('descriptionEnglish')}"
                  th:text="${error}">

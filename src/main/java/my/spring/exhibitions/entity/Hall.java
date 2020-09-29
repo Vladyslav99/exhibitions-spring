@@ -15,14 +15,14 @@ import javax.persistence.*;
 public class Hall {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
-    private String themeEnglish;
+    private String nameEnglish;
 
     @Column(nullable = false)
-    private String themeUkrainian;
+    private String nameUkrainian;
 
     @Column(nullable = false)
     private String descriptionEnglish;

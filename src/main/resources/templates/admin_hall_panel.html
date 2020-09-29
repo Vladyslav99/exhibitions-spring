@@ -12,10 +12,125 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-    <title th:text="#{admin_panel.hall}">Hall</title>
+    <title th:text="#{admin_panel.hall}">Exhibition panel</title>
 </head>
 <header th:insert="header::header"></header>
 <body>
+<div class="container-fluid p-5">
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{admin_panel.hall.table.id}">Id</th>
+                <th scope="col" th:text="#{admin_panel.hall.table.name_en}">Theme EN</th>
+                <th scope="col" th:text="#{admin_panel.hall.table.name_ua}">Theme UA</th>
+                <th scope="col" th:text="#{admin_panel.hall.table.description_en}">Description EN</th>
+                <th scope="col" th:text="#{admin_panel.hall.table.description_ua}">Description UA</th>
+                <th scope="col" th:text="#{admin_panel.hall.table.image}">Image</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="hall : ${halls}">
+                <th scope="row" th:text="${hall.id}">1</th>
+                <td th:text="${hall.nameEnglish}"></td>
+                <td th:text="${hall.nameUkrainian}"></td>
+                <td th:text="${hall.descriptionEnglish}"></td>
+                <td th:text="${hall.descriptionUkrainian}"></td>
+                <td><img th:src="${hall.imageUrl}" style="height: 60px; width: 60px;"></td>
+            </tr>
+            </tbody>
+        </table>
 
+
+        <nav>
+            <ul class="pagination justify-content-center">
+<!--                <li class="page-item" th:classappend="${hallPage.number == 0} ? 'disabled'">-->
+<!--                    <a class="page-link" tabindex="-1"-->
+<!--                       th:href="@{/admin/hall_panel(page=${hallPage.number})}"-->
+<!--                       th:text="#{pagination.link.previous}">Previous</a>-->
+<!--                </li>-->
+
+
+                <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == hallPage.number + 1} ? 'active'">
+                    <a class="page-link" th:href="@{/admin/hall_panel(page=${pageNumber})}"
+                       th:text="${pageNumber}">1</a>
+                </li>
+
+
+<!--                <li class="page-item"-->
+<!--                    th:classappend="${hallPage.number == hallPage.totalPages - 1} ? 'disabled'">-->
+<!--                    <a class="page-link"-->
+<!--                       th:href="@{/admin/hall_panel(page=${hallPage.number + 2})}"-->
+<!--                       th:text="#{pagination.link.next}">Next</a>-->
+<!--                </li>-->
+            </ul>
+        </nav>
+    </div>
+
+    <div class="container w-75">
+        <form action="/admin/hall_panel" method="post" th:object="${hallDTO}">
+            <h2 class="text-center" th:text="#{admin_panel.hall.add_new}">Add new exhibition</h2>
+
+            <div class="form-group">
+                <label for="inputThemeEnglish" th:text="#{admin_panel.hall.label.name_en}">Theme EN</label>
+                <input name="nameEnglish" type="text" class="form-control" id="inputThemeEnglish"
+                       th:value="*{nameEnglish}">
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('nameEnglish')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputNameUkrainian" th:text="#{admin_panel.hall.label.name_ua}">Theme UA</label>
+                <input name="nameUkrainian" type="text" class="form-control" id="inputNameUkrainian"
+                       th:value="*{nameUkrainian}">
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('nameUkrainian')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputDescriptionEnglish" th:text="#{admin_panel.hall.label.description_en}">Description
+                    EN</label>
+                <textarea name="descriptionEnglish" th:value="*{descriptionEnglish}" class="form-control"
+                          id="inputDescriptionEnglish" rows="3" th:text="*{descriptionEnglish}"></textarea>
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('descriptionEnglish')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputDescriptionUkrainian" th:text="#{admin_panel.hall.label.description_ua}">Description
+                    UA</label>
+                <textarea name="descriptionUkrainian" th:value="*{descriptionUkrainian}" class="form-control"
+                          id="inputDescriptionUkrainian" rows="3" th:text="*{descriptionUkrainian}"></textarea>
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('descriptionUkrainian')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Upload</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile01" name="imageUrl"
+                           th:value="*{imageUrl}">
+                    <label class="custom-file-label" for="inputGroupFile01"
+                           th:text="#{admin_panel.hall.select_file.choose}">Choose file</label>
+                </div>
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('imageUrl')}"
+                 th:text="${error}">
+            </div>
+
+            <button type="submit" class="btn btn-primary" th:text="#{admin_panel.hall.button.add}">Add</button>
+        </form>
+    </div>
+
+
+</div>
 </body>
+<footer th:insert="footer::footer"></footer>
 </html>
