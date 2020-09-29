@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <title th:text="#{admin_panel.exhibition}">Exhibition panel</title>
+</head>
+<header th:insert="header::header"></header>
+<body>
+<div class="container-fluid p-5">
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Theme EN</th>
+                <th scope="col">Theme UA</th>
+                <th scope="col">Description EN</th>
+                <th scope="col">Description UA</th>
+                <th scope="col">Image</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="exhibition : ${exhibitions}">
+                <th scope="row" th:text="${exhibition.id}">1</th>
+                <td th:text="${exhibition.themeEnglish}">Mark</td>
+                <td th:text="${exhibition.themeUkrainian}">Otto</td>
+                <td th:text="${exhibition.descriptionEnglish}">@mdo</td>
+                <td th:text="${exhibition.descriptionUkrainian}">@mdo</td>
+                <td><img th:src="${exhibition.imageUrl}" style="height: 60px; width: 60px;"></td>
+<!--                <td th:text="${exhibition.id}"></td>-->
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container pagination">
+        <div th:if="${exhibitionPage.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
+            <a th:href="@{/admin/exhibition_panel(size=${exhibitionPage.size}, page=${pageNumber})}"
+               th:text="${pageNumber}" th:class="${pageNumber==exhibitionPage.number+1} ? active"></a>
+        </div>
+    </div>
+
+    <div class="container w-75">
+        <form action="/admin/exhibition_panel" method="post" th:object="${exhibitionDTO}">
+            <h2 class="text-center" th:text="#{admin_panel.exhibition.add_new}">Add new exhibition</h2>
+
+            <div class="form-group">
+                <label for="inputThemeEnglish" th:text="#{admin_panel.exhibition.label.theme_en}">Theme EN</label>
+                <input name="themeEnglish" type="text" class="form-control" id="inputThemeEnglish"
+                       th:value="*{themeEnglish}">
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('themeEnglish')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputThemeUkrainian" th:text="#{admin_panel.exhibition.label.theme_ua}">Theme UA</label>
+                <input name="themeUkrainian" type="text" class="form-control" id="inputThemeUkrainian"
+                       th:value="*{themeUkrainian}">
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('themeUkrainian')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputDescriptionEnglish" th:text="#{admin_panel.exhibition.label.description_en}">Description
+                    EN</label>
+                <textarea name="descriptionEnglish" th:value="*{descriptionEnglish}" class="form-control"
+                          id="inputDescriptionEnglish" rows="3"  th:text="*{themeEnglish}"></textarea>
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('descriptionEnglish')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputDescriptionUkrainian" th:text="#{admin_panel.exhibition.label.description_ua}">Description
+                    UA</label>
+                <textarea name="descriptionUkrainian" th:value="*{themeUkrainian}" class="form-control"
+                          id="inputDescriptionUkrainian" rows="3" th:text="*{themeUkrainian}"></textarea>
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('descriptionUkrainian')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Upload</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile01" name="imageUrl"
+                           th:value="*{imageUrl}">
+                    <label class="custom-file-label" for="inputGroupFile01"
+                           th:text="#{admin_panel.exhibition.select_file.choose}">Choose file</label>
+                </div>
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('imageUrl')}"
+                 th:text="${error}">
+            </div>
+
+            <button type="submit" class="btn btn-primary" th:text="#{admin_panel.exhibition.button.add}">Add</button>
+        </form>
+    </div>
+
+
+</div>
+</body>
+<footer th:insert="footer::footer"></footer>
+</html>
