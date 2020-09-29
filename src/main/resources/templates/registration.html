@@ -12,47 +12,63 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-    <title>Sign up</title>
+    <title th:text="#{header.link.sign_up}">Sign up</title>
 </head>
 <header th:insert="header::header"></header>
 <body>
 <div class="container-fluid">
     <div class="container login-registration-container w-50 p-5">
-        <form action="/registration" method="post" th:object="${userDTO}">
-            <h1 class="text-center">Create your account</h1>
+        <form th:action="@{/registration}" method="post" th:object="${userDTO}">
+            <h1 class="text-center" th:text="#{registration.label.title}"></h1>
+
             <div class="form-group">
-                <label for="inputLogin">Enter login</label>
-                <input type="text" class="form-control" id="inputLogin" name="username" placeholder="Login...">
+                <label for="inputLogin" th:text="#{registration.label.login}">Enter login</label>
+                <input name="username" type="text" class="form-control" id="inputLogin"
+                       th:value="*{username}" th:placeholder="#{registration.placeholder.login}">
             </div>
-            <div class="alert alert-danger p-1" role="alert"
-                 th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('username')}"
+                 th:text="${error}">
             </div>
 
             <div class="form-group">
-                <label for="inputEmail">Enter email</label>
-                <input type="text" class="form-control" id="inputEmail" placeholder="Email address...">
+                <label for="inputEmail" th:text="#{registration.label.email}">Enter email</label>
+                <input name="email" type="text" class="form-control" id="inputEmail"
+                       th:placeholder="#{registration.placeholder.email}" th:value="*{email}">
             </div>
-            <div class="alert alert-danger p-1" role="alert"
-                 th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
-            </div>
-
-            <div class="form-group">
-                <label for="inputPassword">Enter password</label>
-                <input type="password" class="form-control" id="inputPassword" placeholder="Password...">
-            </div>
-            <div class="alert alert-danger p-1" role="alert">
-                This is a danger alert—check it out!
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('email')}"
+                 th:text="${error}">
             </div>
 
             <div class="form-group">
-                <label for="inputMatchingPassword">Confirm password</label>
-                <input type="password" class="form-control" id="inputMatchingPassword" placeholder="Password...">
+                <label for="inputPassword" th:text="#{registration.label.password}">Enter password</label>
+                <input type="password" name="password" class="form-control" id="inputPassword"
+                       th:placeholder="#{registration.placeholder.password}" th:value="*{password}">
             </div>
-            <div class="alert alert-danger p-1" role="alert">
-                This is a danger alert—check it out!
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('password')}"
+                 th:text="${error}">
             </div>
-            <button type="submit" class="btn btn-primary">Sign up</button>
+
+            <div class="form-group">
+                <label for="inputMatchingPassword" th:text="#{registration.label.confirm_password}">Confirm
+                    password</label>
+                <input name="matchingPassword" type="password" class="form-control" id="inputMatchingPassword"
+                       th:placeholder="#{registration.placeholder.password}" th:value="*{matchingPassword}">
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('password')}"
+                 th:text="${error}">
+            </div>
+
+            <button type="submit" class="btn btn-primary" th:text="#{registration.button.sign_up}">Sign up</button>
         </form>
+        <div class="d-flex justify-content-center p-3">
+            <div class="col-5">
+                <p class="text-center" th:text="#{registration.label.have_account} ">Don't have an account?
+                </p>
+            </div>
+            <div class="col-5">
+                <a href="/login" th:text="#{registration.link.sign_in}">Sign in</a>
+            </div>
+        </div>
     </div>
 </div>
 </body>

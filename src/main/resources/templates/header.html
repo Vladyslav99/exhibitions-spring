@@ -19,34 +19,40 @@
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">Gallery</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Main <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="/main" th:text="#{header.link.main}">Main <span
+                                class="sr-only">(current)</span></a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Exhibition</a>
+                        <a class="nav-link" href="/exhibitions" th:text="#{header.link.exhibitions}">Exhibition</a>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Admin Panel
+                    <li sec:authorize="hasAuthority('ADMIN')" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                           th:text="#{header.link.admin_panel}">Admin Panel
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Exhibitions</a>
-                            <a class="dropdown-item" href="#">Halls</a>
-                            <a class="dropdown-item" href="#">Exhibition events</a>
+                            <a class="dropdown-item" href="/admin/exhibition_panel" th:text="#{admin_panel.exhibition}">
+                                Exhibitions</a>
+                            <a class="dropdown-item" href="/admin/hall_panel" th:text="#{admin_panel.hall}">Halls</a>
+                            <a class="dropdown-item" href="/admin/exhibition_event_panel"
+                               th:text="#{admin_panel.exhibition_event}">Exhibition events</a>
                         </div>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Language
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                           th:text="#{header.link.language}">Language
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" th:href="@{''(lang=en)}" th:text="#{language.english}"></a>
@@ -55,15 +61,17 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Sign in</a>
+                        <a sec:authorize="!isAuthenticated()" class="nav-link" href="/login"
+                           th:text="#{header.link.sign_in}">Sign in</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Sign up</a>
+                        <a sec:authorize="!isAuthenticated()" class="nav-link" href="/registration"
+                           th:text="#{header.link.sign_up}">Sign up</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Logout</a>
+                        <a sec:authorize="isAuthenticated()" class="nav-link" href="/logout" th:text="#{header.link.logout}">Logout</a>
                     </li>
 
                 </ul>

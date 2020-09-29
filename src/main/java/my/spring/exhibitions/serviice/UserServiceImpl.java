@@ -30,6 +30,11 @@ public class UserServiceImpl implements UserService{
         if (!roleOptional.isPresent()){
             return false;
         }
+        if (findUserByUsername(userDTO.getUsername()).isPresent()){
+            System.out.println("user exists");
+            return false;
+        }
+
         User user = User.builder()
                 .username(userDTO.getUsername())
                 .email(userDTO.getEmail())
@@ -42,6 +47,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Optional<User> findUserByUsername(String username) {
-        return Optional.empty();
+        return userRepository.findUserByUsername(username);
     }
 }

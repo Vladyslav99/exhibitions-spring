@@ -1,10 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <title th:text="#{header.link.sign_in}">Login</title>
 </head>
+<header th:insert="header::header"></header>
 <body>
+<div class="container-fluid">
+    <div class="container login-registration-container w-50 p-5">
+        <form th:action="@{/login}" method="post">
+            <h1 class="text-center" th:text="#{login.label.title}">Sing in</h1>
 
+            <div class="form-group">
+                <label for="inputLogin" th:text="#{login.label.login}">Enter login</label>
+                <input name="username" th:placeholder="#{login.placeholder.login}" type="text" class="form-control"
+                       id="inputLogin" placeholder="Login...">
+            </div>
+
+            <div class="form-group">
+                <label for="inputPassword" th:text="#{login.label.password}">Enter password</label>
+                <input name="password" th:placeholder="#{login.placeholder.password}" type="password" class="form-control"
+                       id="inputPassword" placeholder="Password...">
+            </div>
+
+            <!--            <div class="alert alert-danger p-1" role="alert">-->
+            <!--                Wrong login or password-->
+            <!--            </div>-->
+
+            <button type="submit" class="btn btn-primary" th:text="#{login.button.sign_in}">Sign in</button>
+        </form>
+        <div class="d-flex justify-content-center p-3">
+            <div class="col-5">
+                <p class="text-center" th:text="#{login.label.have_no_account} ">Don't have an account?
+                </p>
+            </div>
+            <div class="col-5">
+                <a href="/registration" th:text="#{login.link.sign_up}">Sign up</a>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+<footer th:insert="footer::footer"></footer>
 </html>

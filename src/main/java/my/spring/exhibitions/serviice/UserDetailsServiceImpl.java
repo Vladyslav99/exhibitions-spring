@@ -32,4 +32,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(), grantedAuthorities);
     }
+
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        Optional<User> userOptional = userService.findUserByUsername(username);
+//
+//        if (!userOptional.isPresent()) {
+//            throw new UsernameNotFoundException("User with username " + username + " was not found");
+//        }
+//
+//        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+//        User user = userOptional.get();
+//
+//        for (Role role : user.getRoles()) {
+//            grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
+//        }
+////        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
+//        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+//                user.getPassword(),
+//                grantedAuthorities);
+//    }
 }
