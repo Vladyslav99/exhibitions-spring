@@ -1,16 +1,16 @@
 package my.spring.exhibitions.service;
 
 import my.spring.exhibitions.dto.ExhibitionEventDTO;
-import my.spring.exhibitions.entity.Exhibition;
-import my.spring.exhibitions.entity.ExhibitionEvent;
-import my.spring.exhibitions.entity.ExhibitionEventStatus;
-import my.spring.exhibitions.entity.Hall;
+import my.spring.exhibitions.entity.*;
 import my.spring.exhibitions.repository.ExhibitionEventRepository;
 import my.spring.exhibitions.repository.ExhibitionRepository;
 import my.spring.exhibitions.repository.HallRepository;
+import my.spring.exhibitions.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,6 +30,13 @@ public class ExhibitionEventServiceImpl implements ExhibitionEventService {
     @Autowired
     private ExhibitionEventRepository exhibitionEventRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private UserService userService;
+
+
     @Override
     public List<ExhibitionEvent> findAll() {
         return exhibitionEventRepository.findAll();
@@ -48,7 +55,7 @@ public class ExhibitionEventServiceImpl implements ExhibitionEventService {
                     .timeTo(exhibitionEventDTO.getTimeTo())
                     .ticketCost(exhibitionEventDTO.getTicketCost())
                     .soldPlaces(0l)
-                    .eventStatus(ExhibitionEventStatus.PLANNED)
+                    .eventStatus(ExhibitionEventStatus.FOR_SALE)
                     .maxAvailablePlaces(exhibitionEventDTO.getMaxAvailablePlaces())
                     .exhibition(exhibitionOptional.get())
                     .halls(halls)
@@ -62,6 +69,45 @@ public class ExhibitionEventServiceImpl implements ExhibitionEventService {
     @Override
     public Set<ExhibitionEvent> findAllByDateFromBetweenDateTo(LocalDate dateFrom, LocalDate dateTo) {
         return exhibitionEventRepository.findAllByDateFromGreaterThanEqualAndDateToGreaterThanEqual(dateFrom, dateTo);
+    }
+
+    @Override
+    public Set<ExhibitionEvent> findAllByEventStatus(ExhibitionEventStatus exhibitionEventStatus) {
+        return exhibitionEventRepository.findAllByEventStatus(exhibitionEventStatus);
+    }
+
+    @Override
+    public boolean bookTicket(Long exhibitionId) {
+        Optional<ExhibitionEvent> exhibitionEventOptional =
+                exhibitionEventRepository.findById(exhibitionId);
+        if (!exhibitionEventOptional.isPresent()) {
+            return false;
+        }
+        ExhibitionEvent exhibitionEvent = exhibitionEventOptional.get();
+        if (exhibitionEvent.getSoldPlaces().equals(exhibitionEvent.getMaxAvailablePlaces())){
+            return false;
+        }
+        exhibitionEvent.setSoldPlaces(exhibitionEvent.getSoldPlaces() + 1);
+        if (exhibitionEvent.getSoldPlaces().equals(exhibitionEvent.getMaxAvailablePlaces())){
+            exhibitionEvent.setEventStatus(ExhibitionEventStatus.SOLD_OUT);
+        }
+        exhibitionEventRepository.save(exhibitionEvent);
+        Optional<User> userOptional = getAuthorizedUser();
+        if (!userOptional.isPresent()){
+            return false;
+        }
+        Order order = new Order();
+        order.setExhibitionEvent(exhibitionEvent);
+        order.setUser(userOptional.get());
+        orderRepository.save(order);
+        return true;
+    }
+
+    private Optional<User> getAuthorizedUser(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal instanceof UserDetails ?
+                ((UserDetails)principal).getUsername() : principal.toString();
+        return userService.findUserByUsername(username);
     }
 
     @Override

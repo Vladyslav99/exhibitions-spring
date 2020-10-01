@@ -26,9 +26,9 @@ public class HallsAvailableValidator implements ConstraintValidator<HallsAvailab
         for (ExhibitionEvent exhibitionEvent : exhibitionEvents) {
             for (Hall hall : exhibitionEvent.getHalls()) {
                 if (exhibitionEventDTO.getHallIds().contains(hall.getId())){
-//                    validatorContext.disableDefaultConstraintViolation();
-//                    validatorContext.buildConstraintViolationWithTemplate(validatorContext.getDefaultConstraintMessageTemplate())
-//                            .addPropertyNode( "halls" ).addConstraintViolation();
+                    validatorContext.disableDefaultConstraintViolation();
+                    validatorContext.buildConstraintViolationWithTemplate(validatorContext.getDefaultConstraintMessageTemplate())
+                            .addPropertyNode( "hallIds" ).addConstraintViolation();
                     return false;
                 }
             }

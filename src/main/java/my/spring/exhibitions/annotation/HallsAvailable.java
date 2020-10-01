@@ -8,7 +8,8 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({TYPE,ANNOTATION_TYPE})
@@ -16,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = HallsAvailableValidator.class)
 @Documented
 public @interface HallsAvailable {
-    String message() default "Some of selected halls are in use on this date";
+    String message() default "{admin_panel.exhibition_event.halls_in_use}\"";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

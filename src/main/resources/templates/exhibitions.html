@@ -1,10 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
     <title>Exhibitions</title>
 </head>
+<header th:insert="header::header"></header>
 <body>
+<div class="container p-5">
+    <h1 class="cover-heading text-center" th:text="#{header.link.exhibitions}">Exhibitions</h1>
+    <div class="row d-flex justify-content-center">
 
+        <div style="padding: 10px" th:each="exhibitionEvent : ${exhibitionEvents}">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" th:src="${exhibitionEvent.exhibition.imageUrl}"
+                     alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${#locale.language == 'ua'} ?
+                            ${exhibitionEvent.exhibition.themeUkrainian} :
+                            ${exhibitionEvent.exhibition.themeEnglish}">
+                        UA
+                    </h5>
+
+                    <p class="card-text" th:text="${#locale.language == 'ua'} ?
+                            ${exhibitionEvent.exhibition.descriptionUkrainian} :
+                            ${exhibitionEvent.exhibition.descriptionEnglish}">
+                        Description
+                    </p>
+                </div>
+
+
+                <ul class="list-group">
+                    <li th:each="hall : ${exhibitionEvent.getHalls()}"
+                        class="list-group-item p-1 d-flex justify-content-space-between">
+                        <p class="card-text mr-auto p-2" th:text="${#locale.language == 'ua'} ?
+                            ${hall.nameUkrainian} :
+                            ${hall.nameEnglish}">
+                            Name
+                        </p>
+                        <img th:src="${hall.imageUrl}" alt="hall image">
+                    </li>
+                </ul>
+
+                <div class="card-body p-1">
+                    <div class="row d-flex justify-content-center">
+                        <div class="p-1">
+                            <p th:text="${exhibitionEvent.dateFrom}" class="p-0">Date from</p>
+                            <p th:text="${exhibitionEvent.dateTo}"  class="p-0">Date to</p>
+                        </div>
+                        <div class="p-1">
+                            <p th:text="${exhibitionEvent.dateFrom}" class="p-0">Date from</p>
+                            <p th:text="${exhibitionEvent.dateTo}"  class="p-0">Date to</p>
+                        </div>
+                        <div class="p-1">
+                            <p th:text="${exhibitionEvent.timeFrom}" class="p-0">Date from</p>
+                            <p th:text="${exhibitionEvent.timeTo}"  class="p-0">Date to</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body text-center">
+                    <a th:href="@{/purchase_successful(exhibitionEventId=${exhibitionEvent.id})}" class="btn btn-primary"
+                       th:text="#{exhibitions.button.buy_ticket}">Buy ticket</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 </body>
+<footer th:insert="footer::footer"></footer>
 </html>

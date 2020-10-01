@@ -5,6 +5,7 @@ import my.spring.exhibitions.dto.ExhibitionEventDTO;
 import my.spring.exhibitions.dto.HallDTO;
 import my.spring.exhibitions.entity.Exhibition;
 import my.spring.exhibitions.entity.ExhibitionEvent;
+import my.spring.exhibitions.entity.ExhibitionEventStatus;
 import my.spring.exhibitions.entity.Hall;
 import my.spring.exhibitions.service.ExhibitionEventService;
 import my.spring.exhibitions.service.ExhibitionService;
@@ -58,7 +59,7 @@ public class AdminController {
         return "admin_exhibition_panel";
     }
 
-    private List<Integer> collectPageNumbers(int totalPages){
+    private List<Integer> collectPageNumbers(int totalPages) {
         return IntStream.rangeClosed(1, totalPages)
                 .boxed()
                 .collect(Collectors.toList());
@@ -109,7 +110,7 @@ public class AdminController {
         return "redirect:/admin/hall_panel";
     }
 
-    @GetMapping("/admin/exhibition_event_panel")
+    @GetMapping({"/admin/exhibition_event_panel", "/admin/exhibition_event_panel/update_event_status"})
     public String showAdminExhibitionEventPanel(@RequestParam("page") Optional<Integer> page,
                                                 @ModelAttribute ExhibitionEventDTO exhibitionEventDTO,
                                                 Model model) {
@@ -123,6 +124,7 @@ public class AdminController {
         model.addAttribute("exhibitionEventDTO", exhibitionEventDTO);
         model.addAttribute("exhibitionEventPage", exhibitionEventPage);
         model.addAttribute("exhibitionEvents", exhibitionEventPage.getContent());
+        model.addAttribute("exhibitionEventStatuses", ExhibitionEventStatus.values());
         if (exhibitionEventPage.getTotalPages() > 0) {
             model.addAttribute("pageNumbers", collectPageNumbers(exhibitionEventPage.getTotalPages()));
         }
@@ -135,7 +137,7 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "admin_exhibition_event_panel";
         }
-        if (!exhibitionEventService.saveExhibitionEvent(exhibitionEventDTO)){
+        if (!exhibitionEventService.saveExhibitionEvent(exhibitionEventDTO)) {
             return "redirect:/error";
         }
         return "redirect:/admin/exhibition_event_panel";

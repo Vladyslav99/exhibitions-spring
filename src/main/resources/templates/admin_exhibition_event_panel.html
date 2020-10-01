@@ -17,7 +17,7 @@
 <header th:insert="header::header"></header>
 <body>
 <div class="container-fluid p-2">
-    <div class="container">
+    <div class="container-fluid p-5">
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -150,7 +150,12 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary" th:text="#{admin_panel.exhibition_event.button.add}">Add</button>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('hallIds')}"
+                 th:text="${error}">
+            </div>
+
+            <button type="submit" class="btn btn-primary" th:text="#{admin_panel.exhibition_event.button.add}">Add
+            </button>
 
         </form>
     </div>

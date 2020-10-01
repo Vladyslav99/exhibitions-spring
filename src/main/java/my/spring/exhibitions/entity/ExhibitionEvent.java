@@ -51,4 +51,5 @@ public class ExhibitionEvent {
 
     @ManyToMany
     private List<Hall> halls;
+
 }

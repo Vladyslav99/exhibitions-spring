@@ -12,14 +12,14 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-    <title th:text="#{error.title.error}">Error</title>
+    <title th:text="#{purchase_successful.title}">Error</title>
 </head>
 <header th:insert="header::header"></header>
 <body>
 <main role="main" class="container p-5">
     <div class="jumbotron">
-        <h1 th:text="#{error.message.went_wrong}">Navbar example</h1>
-        <a class="btn btn-lg btn-primary" href="/" role="button" th:text="#{error.message.go_to_main}"></a>
+        <h1 th:text="#{purchase_successful.description}">Navbar example</h1>
+        <a class="btn btn-lg btn-primary" href="/exhibitions" role="button" th:text="#{purchase.message.go_to_main}"></a>
     </div>
 </main>
 </body>
