@@ -1,7 +1,6 @@
 package my.spring.exhibitions.entity;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 
