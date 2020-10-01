@@ -44,26 +44,11 @@
 
         <nav>
             <ul class="pagination justify-content-center">
-<!--                <li class="page-item" th:classappend="${exhibitionPage.number == 0} ? 'disabled' : ''">-->
-<!--                    <a class="page-link" tabindex="-1"-->
-<!--                       th:href="@{/admin/exhibition_panel(page=${exhibitionPage.number})}"-->
-<!--                       th:text="#{pagination.link.previous}">Previous</a>-->
-<!--                </li>-->
-
-
                 <li class="page-item" th:each="pageNumber : ${pageNumbers}"
                     th:classappend="${pageNumber == exhibitionPage.number + 1} ? 'active' : ''">
                     <a class="page-link" th:href="@{/admin/exhibition_panel(page=${pageNumber})}"
                        th:text="${pageNumber}">1</a>
                 </li>
-
-
-<!--                <li class="page-item"-->
-<!--                    th:classappend="${exhibitionPage.number == exhibitionPage.totalPages - 1} ? 'disabled' : ''">-->
-<!--                    <a class="page-link"-->
-<!--                       th:href="@{/admin/exhibition_panel(page=${exhibitionPage.number + 2})}"-->
-<!--                       th:text="#{pagination.link.next}">Next</a>-->
-<!--                </li>-->
             </ul>
         </nav>
     </div>

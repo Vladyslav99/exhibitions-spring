@@ -16,6 +16,147 @@
 </head>
 <header th:insert="header::header"></header>
 <body>
+<div class="container-fluid p-2">
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="row" th:text="#{admin_panel.exhibition_event.table.id}">Idd</th>
+                <th th:text="#{admin_panel.exhibition_event.table.theme}">Theme</th>
+                <th th:text="#{admin_panel.exhibition_event.table.date_from}">Date from</th>
+                <th th:text="#{admin_panel.exhibition_event.table.date_to}">Date to</th>
+                <th th:text="#{admin_panel.exhibition_event.table.time_from}">Time from</th>
+                <th th:text="#{admin_panel.exhibition_event.table.time_to}">Time to</th>
+                <th th:text="#{admin_panel.exhibition_event.table.ticket_cost}">Ticket cost</th>
+                <th th:text="#{admin_panel.exhibition_event.table.max_places}">Max places</th>
+                <th th:text="#{admin_panel.exhibition_event.table.status}">Status</th>
+                <th th:text="#{admin_panel.exhibition_event.table.halls}">Halls</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="exhibitionEvent : ${exhibitionEvents}">
+                <th scope="row" th:text="${exhibitionEvent.id}">1</th>
+                <td th:text="${exhibitionEvent.exhibition.themeEnglish + ' - ' + exhibitionEvent.exhibition.themeUkrainian}">
+                    Картини
+                </td>
+                <td th:text="${exhibitionEvent.dateFrom}">30-09-2020</td>
+                <td th:text="${exhibitionEvent.dateTo}">15-10-2020</td>
+                <td th:text="${exhibitionEvent.timeFrom}">10:00</td>
+                <td th:text="${exhibitionEvent.timeTo}">19:00</td>
+                <td th:text="${exhibitionEvent.ticketCost}">35.56</td>
+                <td th:text="${exhibitionEvent.maxAvailablePlaces}">55</td>
+                <td th:text="${exhibitionEvent.eventStatus}">У продажі</td>
+                <td>
+                    <ul th:each="hall : ${exhibitionEvent.halls}" class="list-group list-group-flush"
+                        style="font-size: 14px;">
+                        <li th:text="${hall.nameEnglish + ' - ' + hall.nameUkrainian}" style="padding: 0"
+                            class="list-group-item">Cras justo odio
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
+
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:each="pageNumber : ${pageNumbers}"
+                    th:classappend="${pageNumber == exhibitionEventPage.number + 1} ? 'active'">
+                    <a class="page-link" th:href="@{/admin/exhibition_event_panel(page=${pageNumber})}"
+                       th:text="${pageNumber}">1</a>
+                </li>
+            </ul>
+        </nav>
+
+
+    </div>
+
+    <div class="container w-75">
+        <form action="/admin/exhibition_event_panel" method="post" th:object="${exhibitionEventDTO}">
+            <h2 class="text-center" th:text="#{admin_panel.exhibition_event.add_new}">Add new exhibition</h2>
+
+            <div class="form-group">
+                <label for="exhibitionSelect"
+                       th:text="#{admin_panel.exhibition_event.label.choose_exhibition}">Choose exhibition</label>
+                <select th:field="*{exhibitionId}" class="form-control" id="exhibitionSelect">
+                    <option th:each="exhibition : ${exhibitions}" th:value="${exhibition.id}"
+                            th:text="${exhibition.themeEnglish} + ' - ' + ${exhibition.themeUkrainian}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="inputDateFrom" th:text="#{admin_panel.exhibition_event.label.choose_date_from}">Date
+                    from</label>
+                <input name="dateFrom" id="inputDateFrom" type="date" class="form-control">
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('dateFrom')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputDateTo" th:text="#{admin_panel.exhibition_event.label.choose_date_to}">Date
+                    to</label>
+                <input name="dateTo" id="inputDateTo" type="date" class="form-control">
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('dateTo')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputTimeFrom" th:text="#{admin_panel.exhibition_event.label.choose_time_from}">Time
+                    from</label>
+                <input name="timeFrom" id="inputTimeFrom" type="time" class="form-control">
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('timeFrom')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputTimeTo" th:text="#{admin_panel.exhibition_event.label.choose_time_to}">Time
+                    to</label>
+                <input name="timeTo" id="inputTimeTo" type="time" class="form-control">
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('timeTo')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputTicketCost" th:text="#{admin_panel.exhibition_event.label.ticket_cost}">Theme
+                    UA</label>
+                <input name="ticketCost" type="number" class="form-control" id="inputTicketCost">
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('ticketCost')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputMaxAvailablePlaces" th:text="#{admin_panel.exhibition_event.label.max_places}">Theme
+                    UA</label>
+                <input name="maxAvailablePlaces" type="number" class="form-control" id="inputMaxAvailablePlaces">
+            </div>
+            <div class="alert alert-danger p-1" role="alert" th:each="error : ${#fields.errors('maxAvailablePlaces')}"
+                 th:text="${error}">
+            </div>
+
+            <div class="form-group">
+                <label for="inputHalls" th:text="#{admin_panel.exhibition_event.label.choose_halls}">Example
+                    multiple select</label>
+                <select th:field="*{hallIds}" multiple class="form-control" id="inputHalls">
+                    <option th:each="hall : ${halls}" th:value="${hall.id}"
+                            th:text="${hall.nameEnglish} + ' - ' + ${hall.nameUkrainian}">
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" th:text="#{admin_panel.exhibition_event.button.add}">Add</button>
+
+        </form>
+    </div>
+
+
+</div>
 </body>
+<footer th:insert="footer::footer"></footer>
 </html>

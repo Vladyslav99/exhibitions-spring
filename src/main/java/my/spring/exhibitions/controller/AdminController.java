@@ -1,15 +1,17 @@
 package my.spring.exhibitions.controller;
 
 import my.spring.exhibitions.dto.ExhibitionDTO;
+import my.spring.exhibitions.dto.ExhibitionEventDTO;
 import my.spring.exhibitions.dto.HallDTO;
 import my.spring.exhibitions.entity.Exhibition;
+import my.spring.exhibitions.entity.ExhibitionEvent;
 import my.spring.exhibitions.entity.Hall;
-import my.spring.exhibitions.serviice.ExhibitionService;
-import my.spring.exhibitions.serviice.HallService;
+import my.spring.exhibitions.service.ExhibitionEventService;
+import my.spring.exhibitions.service.ExhibitionService;
+import my.spring.exhibitions.service.HallService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -28,16 +29,16 @@ import java.util.stream.IntStream;
 @Controller
 public class AdminController {
 
+    private static final int PAGE_SIZE = 5;
+
     @Autowired
     private ExhibitionService exhibitionService;
 
     @Autowired
     private HallService hallService;
 
-    @GetMapping("/admin")
-    public String showAdminPage() {
-        return "admin";
-    }
+    @Autowired
+    private ExhibitionEventService exhibitionEventService;
 
     @GetMapping("/admin/exhibition_panel")
     public String showAdminExhibitionPanel(@RequestParam("page") Optional<Integer> page,
@@ -45,33 +46,33 @@ public class AdminController {
                                            Model model) {
         int currentPage = page.orElse(1);
 
-        final int pageSize = 5;
-        Page<Exhibition> exhibitionPage = exhibitionService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+        Page<Exhibition> exhibitionPage = exhibitionService.findPaginated(PageRequest.of(currentPage - 1, PAGE_SIZE));
         model.addAttribute("exhibitionPage", exhibitionPage);
         model.addAttribute("exhibitions", exhibitionPage.getContent());
         model.addAttribute(exhibitionDTO);
 
         if (exhibitionPage.getTotalPages() > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, exhibitionPage.getTotalPages())
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
+            model.addAttribute("pageNumbers", collectPageNumbers(exhibitionPage.getTotalPages()));
         }
 
         return "admin_exhibition_panel";
     }
 
+    private List<Integer> collectPageNumbers(int totalPages){
+        return IntStream.rangeClosed(1, totalPages)
+                .boxed()
+                .collect(Collectors.toList());
+    }
+
     @PostMapping("/admin/exhibition_panel")
     public String addExhibition(@Valid @ModelAttribute("exhibitionDTO") ExhibitionDTO exhibitionDTO,
                                 BindingResult bindingResult) {
-
         if (bindingResult.hasErrors()) {
             return "admin_exhibition_panel";
         }
 
-        //need handle errors and display messages
         if (!exhibitionService.saveExhibition(exhibitionDTO)) {
-            return "admin_exhibition_panel";
+            return "redirect:/error";
         }
 
         return "redirect:/admin/exhibition_panel";
@@ -84,17 +85,13 @@ public class AdminController {
                                      Model model) {
         int currentPage = page.orElse(1);
 
-        final int pageSize = 5;
-        Page<Hall> hallPage = hallService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+        Page<Hall> hallPage = hallService.findPaginated(PageRequest.of(currentPage - 1, PAGE_SIZE));
         model.addAttribute("hallPage", hallPage);
         model.addAttribute("halls", hallPage.getContent());
         model.addAttribute(hallDTO);
 
         if (hallPage.getTotalPages() > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, hallPage.getTotalPages())
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
+            model.addAttribute("pageNumbers", collectPageNumbers(hallPage.getTotalPages()));
         }
 
         return "admin_hall_panel";
@@ -106,12 +103,41 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "admin_hall_panel";
         }
-
-        //need handle errors and display messages
         if (!hallService.saveHall(hallDTO)) {
-            return "admin_hall_panel";
+            return "redirect:/error";
         }
-
         return "redirect:/admin/hall_panel";
+    }
+
+    @GetMapping("/admin/exhibition_event_panel")
+    public String showAdminExhibitionEventPanel(@RequestParam("page") Optional<Integer> page,
+                                                @ModelAttribute ExhibitionEventDTO exhibitionEventDTO,
+                                                Model model) {
+        int currentPage = page.orElse(1); //duplicated code
+        Page<ExhibitionEvent> exhibitionEventPage =
+                exhibitionEventService.findPaginated(PageRequest.of(currentPage - 1, PAGE_SIZE));
+        List<Exhibition> exhibitions = exhibitionService.findAll();
+        List<Hall> halls = hallService.findAll();
+        model.addAttribute("exhibitions", exhibitions);
+        model.addAttribute("halls", halls);
+        model.addAttribute("exhibitionEventDTO", exhibitionEventDTO);
+        model.addAttribute("exhibitionEventPage", exhibitionEventPage);
+        model.addAttribute("exhibitionEvents", exhibitionEventPage.getContent());
+        if (exhibitionEventPage.getTotalPages() > 0) {
+            model.addAttribute("pageNumbers", collectPageNumbers(exhibitionEventPage.getTotalPages()));
+        }
+        return "admin_exhibition_event_panel";
+    }
+
+    @PostMapping("/admin/exhibition_event_panel")
+    public String addExhibitionEvent(@Valid @ModelAttribute("exhibitionEventDTO") ExhibitionEventDTO exhibitionEventDTO,
+                                     BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "admin_exhibition_event_panel";
+        }
+        if (!exhibitionEventService.saveExhibitionEvent(exhibitionEventDTO)){
+            return "redirect:/error";
+        }
+        return "redirect:/admin/exhibition_event_panel";
     }
 }

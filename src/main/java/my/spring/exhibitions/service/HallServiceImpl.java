@@ -1,4 +1,4 @@
-package my.spring.exhibitions.serviice;
+package my.spring.exhibitions.service;
 
 import my.spring.exhibitions.dto.HallDTO;
 import my.spring.exhibitions.entity.Hall;
@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

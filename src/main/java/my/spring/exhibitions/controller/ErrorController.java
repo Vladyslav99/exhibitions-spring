@@ -8,6 +8,6 @@ public class ErrorController {
 
     @GetMapping("/error")
     public String showErrorPage(){
-        return "errorrr";
+        return "error";
     }
 }

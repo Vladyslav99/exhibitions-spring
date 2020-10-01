@@ -16,5 +16,21 @@
 </head>
 <header th:insert="header::header"></header>
 <body>
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <div class="container p-5">
+        <h1 class="cover-heading text-center">Виставки</h1>
+        <p class="lead text-center">Існують ролі: користувач, авторизований користувач, адміністратор.</p>
+        <p class="lead text-center">Адміністратор робить список експозицій (тема, зал, період та час роботи, вартість
+            квитка), а також може відміняти експозиції, переглядати статистику відвідувань.</p>
+        <p class="lead text-center">Користувач може переглядати експозиції за темою, вартістю квитка, а також
+            фільтрувати за датою проведення.</p>
+        <p class="lead text-center">Авторизований користувач може купити квиток на обрану експозицію. </p>
+        <p class="lead text-center">
+            <a sec:authorize="!isAuthenticated()" href="/login" class="btn btn-lg btn-primary"
+               th:text="#{login.label.title}">Login</a>
+        </p>
+    </div>
+</div>
 </body>
+<footer th:insert="footer::footer"></footer>
 </html>

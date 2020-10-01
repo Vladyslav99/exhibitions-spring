@@ -1,4 +1,4 @@
-package my.spring.exhibitions.serviice;
+package my.spring.exhibitions.service;
 
 import my.spring.exhibitions.dto.ExhibitionDTO;
 import my.spring.exhibitions.entity.Exhibition;
@@ -8,8 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExhibitionServiceImpl implements ExhibitionService{
@@ -21,8 +21,6 @@ public class ExhibitionServiceImpl implements ExhibitionService{
     public List<Exhibition> findAll() {
         return exhibitionRepository.findAll();
     }
-
-
 
     @Override
     public boolean saveExhibition(ExhibitionDTO exhibitionDTO) {
@@ -40,5 +38,10 @@ public class ExhibitionServiceImpl implements ExhibitionService{
     @Override
     public Page<Exhibition> findPaginated(Pageable pageable) {
         return exhibitionRepository.findAll(pageable);
+    }
+
+    @Override
+    public Optional<Exhibition> findById(Long id) {
+        return exhibitionRepository.findById(id);
     }
 }

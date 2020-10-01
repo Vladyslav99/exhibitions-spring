@@ -1,4 +1,4 @@
-package my.spring.exhibitions.serviice;
+package my.spring.exhibitions.service;
 
 import my.spring.exhibitions.dto.UserDTO;
 import my.spring.exhibitions.entity.User;
