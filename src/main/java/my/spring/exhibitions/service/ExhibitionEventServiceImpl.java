@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +44,11 @@ public class ExhibitionEventServiceImpl implements ExhibitionEventService {
     }
 
     @Override
+    public Optional<ExhibitionEvent> findById(Long id) {
+        return exhibitionEventRepository.findById(id);
+    }
+
+    @Override
     public boolean saveExhibitionEvent(ExhibitionEventDTO exhibitionEventDTO) {
         Optional<Exhibition> exhibitionOptional = exhibitionRepository.findById(exhibitionEventDTO.getExhibitionId());
         List<Hall> halls = hallRepository.findAllById(exhibitionEventDTO.getHallIds());
@@ -67,13 +73,40 @@ public class ExhibitionEventServiceImpl implements ExhibitionEventService {
     }
 
     @Override
+    public boolean saveExhibitionEvent(Optional<ExhibitionEvent> exhibitionEventOptional,
+                                       ExhibitionEventStatus status) {
+        if (!exhibitionEventOptional.isPresent()){
+            return false;
+        }
+        ExhibitionEvent exhibitionEvent = exhibitionEventOptional.get();
+        exhibitionEvent.setEventStatus(status);
+        exhibitionEventRepository.save(exhibitionEvent);
+        return true;
+    }
+
+    @Override
     public Set<ExhibitionEvent> findAllByDateFromBetweenDateTo(LocalDate dateFrom, LocalDate dateTo) {
-        return exhibitionEventRepository.findAllByDateFromGreaterThanEqualAndDateToGreaterThanEqual(dateFrom, dateTo);
+        return exhibitionEventRepository.findAllByDateFromGreaterThanEqualAndDateToLessThanEqual(dateFrom, dateTo);
+    }
+
+    @Override
+    public Set<ExhibitionEvent> findAllByDatesBetweenDateAndStatus(LocalDate date, ExhibitionEventStatus status) {
+        return exhibitionEventRepository.findAllByDatesBetweenDateAndStatus(date, status);
     }
 
     @Override
     public Set<ExhibitionEvent> findAllByEventStatus(ExhibitionEventStatus exhibitionEventStatus) {
         return exhibitionEventRepository.findAllByEventStatus(exhibitionEventStatus);
+    }
+
+    @Override
+    public Set<ExhibitionEvent> findAllByTicketCostBetween(BigDecimal from, BigDecimal to) {
+        return exhibitionEventRepository.findAllByTicketCostBetween(from, to);
+    }
+
+    @Override
+    public Set<ExhibitionEvent> findAllByExhibitionId(Long exhibitionId) {
+        return exhibitionEventRepository.findAllByExhibitionId(exhibitionId);
     }
 
     @Override

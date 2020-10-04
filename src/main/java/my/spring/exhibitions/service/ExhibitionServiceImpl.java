@@ -3,6 +3,7 @@ package my.spring.exhibitions.service;
 import my.spring.exhibitions.dto.ExhibitionDTO;
 import my.spring.exhibitions.entity.Exhibition;
 import my.spring.exhibitions.repository.ExhibitionRepository;
+import my.spring.exhibitions.util.ImagePathFormatterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +30,9 @@ public class ExhibitionServiceImpl implements ExhibitionService{
                 .themeUkrainian(exhibitionDTO.getThemeUkrainian())
                 .descriptionEnglish(exhibitionDTO.getDescriptionEnglish())
                 .descriptionUkrainian(exhibitionDTO.getDescriptionUkrainian())
-                .imageUrl(exhibitionDTO.getImageUrl())
+                .imageUrl(ImagePathFormatterUtil.formatPath(exhibitionDTO.getImageUrl()))
                 .build();
-        exhibitionRepository.save(exhibition);//make something with it
+        exhibitionRepository.save(exhibition);
         return true;
     }
 

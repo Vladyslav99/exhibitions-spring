@@ -17,11 +17,58 @@
 <body>
 <div class="container p-5">
     <h1 class="cover-heading text-center" th:text="#{header.link.exhibitions}">Exhibitions</h1>
+
+    <div class="container d-flex flex-column">
+        <div class="d-flex justify-content-center">
+            <form th:action="@{/exhibitions/between_dates}" class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="date" name="date" class="form-control" id="inputDateFrom">
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2"
+                        th:text="#{exhibitions.button.find_exhibitions_by_date}"></button>
+            </form>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <form th:action="@{/exhibitions/ticketCost_between}" class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="number" name="ticketCostFrom" class="form-control">
+                </div>
+
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="number" name="ticketCostTo" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2"
+                        th:text="#{exhibitions.button.find_exhibitions_by_ticket_cost}"></button>
+            </form>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <form th:action="@{/exhibitions/theme}" class="form-inline">
+
+                <div class="form-group mx-sm-3 mb-2">
+                    <select name="exhibitionId" class="form-control">
+                        <option th:each="exhibition : ${exhibitions}" th:value="${exhibition.id}"
+                                th:text="${exhibition.themeEnglish} + ' - ' + ${exhibition.themeUkrainian}">
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2"
+                        th:text="#{exhibitions.button.find_exhibitions_by_theme}"></button>
+            </form>
+        </div>
+
+    </div>
+
     <div class="row d-flex justify-content-center">
 
         <div style="padding: 10px" th:each="exhibitionEvent : ${exhibitionEvents}">
-            <div class="card" style="width: 18rem;">
-                <img class="card-img-top" th:src="${exhibitionEvent.exhibition.imageUrl}"
+            <div class="card" style="width: 20rem;">
+                <img class="card-img-top" style="width: 20rem; height: 20rem;"
+                     th:src="${exhibitionEvent.exhibition.imageUrl}"
                      alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${#locale.language == 'ua'} ?
@@ -41,35 +88,32 @@
                 <ul class="list-group">
                     <li th:each="hall : ${exhibitionEvent.getHalls()}"
                         class="list-group-item p-1 d-flex justify-content-space-between">
-                        <p class="card-text mr-auto p-2" th:text="${#locale.language == 'ua'} ?
+                        <p class="card-text mr-auto p-0" th:text="${#locale.language == 'ua'} ?
                             ${hall.nameUkrainian} :
                             ${hall.nameEnglish}">
                             Name
                         </p>
-                        <img th:src="${hall.imageUrl}" alt="hall image">
+                        <img th:src="${hall.imageUrl}" style="height: 40px; width: 40px;" alt="hall image">
                     </li>
                 </ul>
 
-                <div class="card-body p-1">
-                    <div class="row d-flex justify-content-center">
-                        <div class="p-1">
+                <div class="card-body p-0">
+                    <div class="row d-flex justify-content-around">
+                        <div class="p-0">
                             <p th:text="${exhibitionEvent.dateFrom}" class="p-0">Date from</p>
-                            <p th:text="${exhibitionEvent.dateTo}"  class="p-0">Date to</p>
+                            <p th:text="${exhibitionEvent.dateTo}" class="p-0">Date to</p>
                         </div>
-                        <div class="p-1">
-                            <p th:text="${exhibitionEvent.dateFrom}" class="p-0">Date from</p>
-                            <p th:text="${exhibitionEvent.dateTo}"  class="p-0">Date to</p>
-                        </div>
-                        <div class="p-1">
+                        <div class="p-0">
                             <p th:text="${exhibitionEvent.timeFrom}" class="p-0">Date from</p>
-                            <p th:text="${exhibitionEvent.timeTo}"  class="p-0">Date to</p>
+                            <p th:text="${exhibitionEvent.timeTo}" class="p-0">Date to</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-body text-center">
-                    <a th:href="@{/purchase_successful(exhibitionEventId=${exhibitionEvent.id})}" class="btn btn-primary"
-                       th:text="#{exhibitions.button.buy_ticket}">Buy ticket</a>
+                    <a th:href="@{/purchase_successful(exhibitionEventId=${exhibitionEvent.id})}"
+                       class="btn btn-primary"
+                       th:text="#{exhibitions.button.buy_ticket} + ' ' + ${exhibitionEvent.ticketCost}">Buy ticket</a>
                 </div>
             </div>
         </div>

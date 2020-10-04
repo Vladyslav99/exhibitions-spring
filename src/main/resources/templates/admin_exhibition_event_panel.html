@@ -16,7 +16,7 @@
 <header th:insert="header::header"></header>
 <body>
 <div class="container-fluid p-2">
-    <div class="container-fluid p-5">
+    <div class="container-fluid">
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -27,6 +27,7 @@
                 <th th:text="#{admin_panel.exhibition_event.table.time_from}">Time from</th>
                 <th th:text="#{admin_panel.exhibition_event.table.time_to}">Time to</th>
                 <th th:text="#{admin_panel.exhibition_event.table.ticket_cost}">Ticket cost</th>
+                <th th:text="#{admin_panel.exhibition_event.table.sold_places}">Max places</th>
                 <th th:text="#{admin_panel.exhibition_event.table.max_places}">Max places</th>
                 <th th:text="#{admin_panel.exhibition_event.table.status}">Status</th>
                 <th th:text="#{admin_panel.exhibition_event.table.halls}">Halls</th>
@@ -35,16 +36,38 @@
             <tbody>
             <tr th:each="exhibitionEvent : ${exhibitionEvents}">
                 <th scope="row" th:text="${exhibitionEvent.id}">1</th>
-                <td th:text="${exhibitionEvent.exhibition.themeEnglish + ' - ' + exhibitionEvent.exhibition.themeUkrainian}">
-                    Картини
+                <td>
+                    <p th:text="${exhibitionEvent.exhibition.themeEnglish}"></p>
+                    <p th:text="${exhibitionEvent.exhibition.themeUkrainian}"></p>
                 </td>
                 <td th:text="${exhibitionEvent.dateFrom}">30-09-2020</td>
                 <td th:text="${exhibitionEvent.dateTo}">15-10-2020</td>
                 <td th:text="${exhibitionEvent.timeFrom}">10:00</td>
                 <td th:text="${exhibitionEvent.timeTo}">19:00</td>
                 <td th:text="${exhibitionEvent.ticketCost}">35.56</td>
+                <td th:text="${exhibitionEvent.soldPlaces}">35.56</td>
                 <td th:text="${exhibitionEvent.maxAvailablePlaces}">55</td>
-                <td th:text="${exhibitionEvent.eventStatus}">У продажі</td>
+                <td>
+                    <p th:text="${exhibitionEvent.eventStatus}"></p>
+                    <form th:action="@{/admin/exhibition_event_panel/update_status(eventId=${exhibitionEvent.id})}"
+                          method="post">
+                        <select name="status" class="form-control" style="font-size: 12px">
+                            <option th:value="FOR_SALE"
+                                    th:text="#{admin_panel.exhibition_event.status_for_sale}"></option>
+                            <option th:value="PLANNED"
+                                    th:text="#{admin_panel.exhibition_event.status_planned}"></option>
+                            <option th:value="PASSED" th:text="#{admin_panel.exhibition_event.status_passed}"></option>
+                            <option th:value="CANCELED"
+                                    th:text="#{admin_panel.exhibition_event.status_canceled}"></option>
+                            <option th:value="SOLD_OUT"
+                                    th:text="#{admin_panel.exhibition_event.status_sold_out}"></option>
+                        </select>
+
+                        <button type="submit" class="btn btn-primary" style="font-size: 12px"
+                                th:text="#{admin_panel.exhibition_event.button.save}">save
+                        </button>
+                    </form>
+                </td>
                 <td>
                     <ul th:each="hall : ${exhibitionEvent.halls}" class="list-group list-group-flush"
                         style="font-size: 14px;">
