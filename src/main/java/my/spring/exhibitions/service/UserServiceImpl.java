@@ -9,6 +9,7 @@ import my.spring.exhibitions.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService{
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public boolean saveUser(UserDTO userDTO) {
         Optional<Role> roleOptional = roleRepository.findByName(RoleType.CUSTOMER.name());
         if (!roleOptional.isPresent()){

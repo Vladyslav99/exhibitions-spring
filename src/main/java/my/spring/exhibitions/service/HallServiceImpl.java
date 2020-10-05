@@ -31,7 +31,7 @@ public class HallServiceImpl implements HallService{
                 .descriptionUkrainian(hallDTO.getDescriptionUkrainian())
                 .imageUrl(ImagePathFormatterUtil.formatPath(hallDTO.getImageUrl()))
                 .build();
-        hallRepository.save(hall);//make something with it
+        hallRepository.save(hall);
         return true;
     }
 

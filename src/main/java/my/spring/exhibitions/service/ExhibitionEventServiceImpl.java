@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -49,6 +50,7 @@ public class ExhibitionEventServiceImpl implements ExhibitionEventService {
     }
 
     @Override
+    @Transactional
     public boolean saveExhibitionEvent(ExhibitionEventDTO exhibitionEventDTO) {
         Optional<Exhibition> exhibitionOptional = exhibitionRepository.findById(exhibitionEventDTO.getExhibitionId());
         List<Hall> halls = hallRepository.findAllById(exhibitionEventDTO.getHallIds());
@@ -110,6 +112,7 @@ public class ExhibitionEventServiceImpl implements ExhibitionEventService {
     }
 
     @Override
+    @Transactional
     public boolean bookTicket(Long exhibitionId) {
         Optional<ExhibitionEvent> exhibitionEventOptional =
                 exhibitionEventRepository.findById(exhibitionId);
